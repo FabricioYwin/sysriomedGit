@@ -1,7 +1,6 @@
 <?php
 
- function listaOS($conn, $DataInicial = NULL, $DataFinal = NULL, $Setor = NULL, $Status = NULL){
-    $RelacaoOS = array();
+ function listaOS($conn, $DataInicial = NULL, $DataFinal = NULL, $Setor = NULL, $Status = NULL){   
     $resultado = sqlsrv_query($conn, "select os.id, os.dataHora, cliente.nomeFantasia, 
         setor.nome as NomeSetor, os.motivoOs, 
         (select sum(itemMaterial.valorUnitario) from os as OS1
