@@ -8,11 +8,14 @@
         
     if ($DataInicial) {
         $where[] = "os.dataHora >= '{$DataInicial}'";
-        } elseif ($DataFinal) {
+        }
+    if ($DataFinal) {
             $where[] = "os.dataHora <= '{$DataFinal}'";    
-        } elseif ($Setor) {
+    } 
+    if ($Setor) {
             $where[] = "setor.id = '{$Setor}'";    
-        } elseif ($Status) {
+        } 
+    if ($Status) {
             $where[] = "os.status = '{$Status}'";
         }
         
@@ -57,7 +60,7 @@ order by dataHora DESC";
     while ($os = sqlsrv_fetch_array($resultado, SQLSRV_FETCH_ASSOC)){;
         array_push($RelacaoOS, $os);
     }
-    
+    var_dump($SQL);
     return $RelacaoOS;
     
  }
