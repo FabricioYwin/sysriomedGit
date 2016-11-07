@@ -1,6 +1,10 @@
 <?php
 
  function listaOS($conn, $DataInicial = NULL, $DataFinal = NULL, $Setor = NULL, $Status = NULL){   
+    $where = [];
+    $where[] = "(cliente.id = (select usuario.idCliente from usuario where usuario.login = '".usuarioLogado()."' ) and
+    (os.dataHora  between CONVERT(datetime, {$dataInicial}, 105) and CONVERT(datetime, {$DataFinal}, 105)+1)) and"
+    . "setor.id = {$Setor} and os.status = {$Status}";
     $resultado = sqlsrv_query($conn, "select os.id, os.dataHora, cliente.nomeFantasia, 
         setor.nome as NomeSetor, os.motivoOs, 
         (select sum(itemMaterial.valorUnitario) from os as OS1
@@ -33,8 +37,7 @@ usuario.id = os.idUsuarioFinal
 inner join tipoOs on
 tipoOs.id = os.idTipoOs
 
-where cliente.id = (select usuario.idCliente from usuario where usuario.login = '".usuarioLogado()."' ) and
-    (os.dataHora  between CONVERT(datetime, '01-01-2016', 105) and CONVERT(datetime, '30-10-2016', 105)+1)
+where " . implode(' AND ', $where) . "
 
 order by dataHora DESC");
     
