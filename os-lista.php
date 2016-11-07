@@ -24,7 +24,7 @@
                     <input type="text" id="DataFinal" name="DataFinal" style="width: 40%">
                 </div>
                 <div class="col-lg-3">Setor&nbsp;
-                    <select id="setor" style="width: 45%">
+                    <select id="Setor" style="width: 45%">
                         <?php
                             $RelacaoSetor = SetorCliente($conn);
                             foreach ($RelacaoSetor as $SetorOS) :
@@ -71,7 +71,8 @@
         <th class="text-center">AÇÕES</th>
     </tr>
     <?php
-    $RelacaoOS = listaOS($conn, $DataInicial = NULL, $DataFinal = NULL, $Setor = NULL, $Status = NULL);
+   $RelacaoOS = listaOS($conn, isset($_POST['DataInicial']) ? $_POST['DataInicial'] : null, 
+            isset($_POST['DataFinal']) ? $_POST['DataFinal'] : null, isset($_POST['Setor']) ? $_POST['Setor'] : null, isset($_POST['Status']) ? $_POST['Status'] : null );
     foreach ($RelacaoOS as $os) : 
 // $RelacaoOS = listaOS($conn);
 // foreach ($RelacaoOS as $os): ?>    
