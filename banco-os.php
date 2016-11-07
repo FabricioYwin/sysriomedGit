@@ -3,13 +3,16 @@
  function listaOS($conn, $DataInicial = NULL, $DataFinal = NULL, $Setor = NULL, $Status = NULL){   
     $where = [];
     $where[] = "(cliente.id = (select usuario.idCliente from usuario where usuario.login = '".usuarioLogado()."' ) and
-    (os.dataHora  between CONVERT(datetime, {$DataInicial}, 105) and CONVERT(datetime, {$DataFinal}, 105)))";
-//        . " and 
-//    setor.id = {$Setor} and os.status = {$Status}";
+    (os.dataHora  between CONVERT(datetime, {$DataInicial}, 105) and CONVERT(datetime, {$DataFinal}, 105)))and setor.id = {$Setor} and os.status = {$Status}";
+        
     if ($DataInicial) {
     $where[] = "os.dataHora >= '{$DataInicial}'";
     } elseif ($DataFinal) {
         $where[] = "os.dataHora <= '{$DataFinal}'";    
+    } elseif ($Setor) {
+        $where[] = "setor.id = '{$Setor}'";    
+    } elseif ($Status) {
+        $where[] = "os.status = '{$Status}'";
     }
     
         
