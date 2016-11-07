@@ -71,7 +71,7 @@
         <th class="text-center">AÇÕES</th>
     </tr>
     <?php
-    $RelacaoOS = listaOS($conn);
+    $RelacaoOS = listaOS($conn, $DataInicial = NULL, $DataFinal = NULL, $Setor = NULL, $Status = NULL);
     foreach ($RelacaoOS as $os) : 
 // $RelacaoOS = listaOS($conn);
 // foreach ($RelacaoOS as $os): ?>    
