@@ -16,8 +16,7 @@
             $where[] = "os.status = '{$Status}'";
         }
         
-        
-        $resultado = sqlsrv_query($conn, "select os.id, os.dataHora, cliente.nomeFantasia, 
+        $SQL = "select os.id, os.dataHora, cliente.nomeFantasia, 
         setor.nome as NomeSetor, os.motivoOs, 
         (select sum(itemMaterial.valorUnitario) from os as OS1
 
@@ -51,7 +50,9 @@ tipoOs.id = os.idTipoOs
 
 where " . implode(' AND ', $where) . "
 
-order by dataHora DESC");
+order by dataHora DESC";
+        
+        $resultado = sqlsrv_query($conn, $SQL);
     
     while ($os = sqlsrv_fetch_array($resultado, SQLSRV_FETCH_ASSOC)){;
         array_push($RelacaoOS, $os);
