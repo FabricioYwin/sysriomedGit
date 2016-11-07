@@ -3,7 +3,7 @@
  function listaOS($conn, $DataInicial = NULL, $DataFinal = NULL, $Setor = NULL, $Status = NULL){   
      $RelacaoOS = array();
     $where = [];
-    $where[] = "(cliente.id = (select usuario.idCliente from usuario where usuario.login = '".usuarioLogado()."')";
+    $where[] = "cliente.id = (select usuario.idCliente from usuario where usuario.login = '".usuarioLogado()."')";
      
     if ($DataInicial) {
         $where[] = "os.dataHora >= '{$DataInicial}'";
