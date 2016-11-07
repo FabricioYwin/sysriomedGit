@@ -1,0 +1,33 @@
+use medx;
+select  os.id,  cliente.razaoSocial,  os.dataHora,  cliente.endereco, 
+ cliente.enderecoNumero,  cliente.enderecoBairro,  cliente.enderecoCidade, 
+ cliente.enderecoUF,  os.nomeUsuarioSolicitante,  cliente.telefone,  cliente.ramal, 
+ material.nome,  itemMaterial.rm,  modelo.foto, modelo.nome, itemMaterial.nSerie, itemMaterial.patrimonio, 
+ setor.nome as Setor, itemMaterial.localizacao, os.acessoriosRetirados, tipoOs.nome, os.motivoOs, 
+ os.observacoes, os.horasTecnicas, os.nomeUsuarioRetirado, usuario.login, os.nomeUsuarioAutorizado, os.dataHoraFinal, 
+ os.nomeUsuarioResponsavel, os.dataHoraAssinatura, os.satisfacao  
+
+from os 
+
+inner join itemMaterial on
+itemMaterial.id = os.idItemMaterial
+
+inner join modelo on
+modelo.id = itemMaterial.idModelo
+
+inner join material on
+material.id = itemMaterial.idMaterial
+
+inner join cliente on 
+cliente.id = os.idCliente
+
+inner join setor on
+setor.id = os.idSetor
+
+inner join usuario on
+usuario.id = os.idUsuarioFinal
+
+inner join tipoOs on
+tipoOs.id = os.idTipoOs
+
+ where  os.id = 47864

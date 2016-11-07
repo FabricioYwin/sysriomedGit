@@ -1,0 +1,75 @@
+o.css
+
+
+fieldset{
+	width: 750px;
+	margin: 10px auto;
+	color: #444;
+	border: 5px solid #ccc;
+	font-family: Helvetica;
+	padding: 15px;
+}
+
+h1{
+	text-align: center;
+}
+
+p.sub-titulo{
+	font-size: 20px;
+}
+
+.direita{
+	text-align: right;
+}
+
+.center{
+	text-align: center;
+}
+1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+fieldset{
+	width: 750px;
+	margin: 10px auto;
+	color: #444;
+	border: 5px solid #ccc;
+	font-family: Helvetica;
+	padding: 15px;
+}
+ 
+h1{
+	text-align: center;
+}
+ 
+p.sub-titulo{
+	font-size: 20px;
+}
+ 
+.direita{
+	text-align: right;
+}
+ 
+.center{
+	text-align: center;
+}

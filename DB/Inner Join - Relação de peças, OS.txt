@@ -1,0 +1,15 @@
+use medx;
+
+select os.id, material.id, Material.nome, movimentoItemMaterial.quantidade, movimentoItemMaterial.valorUnitario 
+from os 
+
+inner join itemMaterial on
+itemMaterial.id = os.idItemMaterial 
+
+inner join material on
+material.id = itemMaterial.idMaterial
+
+inner join movimentoItemMaterial on
+itemMaterial.id = movimentoItemMaterial.idItemMaterial
+
+ where  os.id = 47864
