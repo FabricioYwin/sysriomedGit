@@ -59,7 +59,7 @@ order by dataHora DESC";
     while ($os = sqlsrv_fetch_array($resultado, SQLSRV_FETCH_ASSOC)){;
         array_push($RelacaoOS, $os);
     }
-    var_dump($SQL);
+    
     return $RelacaoOS;
     
  }

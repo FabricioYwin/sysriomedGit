@@ -24,7 +24,7 @@
                     <input type="text" id="DataFinal" name="DataFinal" style="width: 40%">
                 </div>
                 <div class="col-lg-3">Setor&nbsp;
-                    <select id="Setor" style="width: 45%">
+                    <select id="Setor" name="Setor" style="width: 45%">
                         <?php
                             $RelacaoSetor = SetorCliente($conn);
                             foreach ($RelacaoSetor as $SetorOS) :
@@ -36,7 +36,7 @@
                     </select>
                 </div>
                 <div class="col-lg-3">Status&nbsp;
-                    <select id="status" style="width: 50%">
+                    <select id="status" name="Status" style="width: 50%">
                         <?php
                             $statusOS = statusOS($conn);
                             foreach ($statusOS as $RelStatus) :
