@@ -1,6 +1,6 @@
 <?php
 
- function listaOS($conn){
+ function listaOS($conn, $DataInicial = NULL, $DataFinal = NULL, $Setor = NULL, $Status = NULL){
     $RelacaoOS = array();
     $resultado = sqlsrv_query($conn, "select os.id, os.dataHora, cliente.nomeFantasia, 
         setor.nome as NomeSetor, os.motivoOs, 
