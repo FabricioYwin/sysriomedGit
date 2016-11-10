@@ -38,27 +38,18 @@
 
 /* @var $_GET type */
 $id = $_GET['id'];
-//$os = listaOS($conn, $id);
 $os = buscaOs($conn, $id);
 
 $resultadoHistOS = listaHistOS($conn, $id);
 
 $resultadoMatOS = listaMatOS($conn, $id);
  
-//echo $os['id'];
-//echo $os['nomeFantasia'];
-
 
 
 ?>
-<!--<h1>OS - Rio Med</h1>-->
+
 <form action="altera-os.php" method="post">
-<!--    <div class="container">
-        <div class="row">
-            <div class="col-md-10"><h4>Cliente:</h4><input class="form-control" type="text" name="data" value="<?//=$os['razaoSocial']?>"></div>
-            <div class="col-md-2">.col-md-1</div>
-        </div>
-    </div>-->
+
 
 <table  class="table table-striped table-responsive table-bordered">
     <tr>
@@ -92,9 +83,20 @@ $resultadoMatOS = listaMatOS($conn, $id);
             <td>Data:</td>
             <td><p class="text-justify">
                     <?php $data = $os['dataHora']; 
-                            echo $data->format('d-m-Y'); ?>
+                        if($data==NULL){
+                            echo '00/00/00 00:00:00';
+                        } else {
+                            echo $data->format('d-m-Y'); 
+                        }
+                            ?>
                 </p>
-                <input type="hidden" name="data" value="<?php echo $data->format('d-m-Y'); ?>">
+                <input type="hidden" name="data" value="<?php 
+                    if($data==NULL){
+                            echo '00/00/00 00:00:00';
+                        } else {
+                            echo $data->format('d-m-Y'); 
+                        }
+                        ?>">
             </td>
         </tr> 
         <tr>
@@ -192,11 +194,11 @@ $resultadoMatOS = listaMatOS($conn, $id);
                 <input type="hidden" name="rm" 
                        value="<?=$rm?>" >
             </td>        
-            <td colspan="2" rowspan="4">
-                <p class="text-justify">
+            <td colspan="2" rowspan="4" >
+                <p class="center">
                     <?php $foto = $os['foto']; ?>
-                    <img src="<?php echo $foto; ?>" title="<?=$equipamento;?>" />
-                    <?=$foto?>
+                    <img src="<?="http://riomed.ddns.net:7821/seci/resources/imagens/".$foto; ?>" title="<?=  utf8_encode($equipamento);?>" class="img-responsive" style="width: 100px; height: 80px" />
+                    
                     
                 </p>
                 <input type="hidden" name="foto" 
@@ -299,7 +301,12 @@ $resultadoMatOS = listaMatOS($conn, $id);
             <td><?php echo $Hist['etapa']; ?></td>
             <td colspan="4"><?php echo utf8_encode($Hist['descricao']); ?></td>
             <td colspan="2"><?php echo $Hist['login']; ?></td>
-            <td><?php $data = $Hist['dataHora']; echo $data->format('Y-m-d H:i:s'); ?></td>
+            <td><?php $data = $Hist['dataHora']; 
+                    if($data == null){
+                        echo '00/00/00 00:00:00';
+                    } else {
+                    echo $data->format('d-m-Y H:i:s'); } 
+                    ?></td>
         </tr>
             <?php endforeach; ?>
         
@@ -307,7 +314,7 @@ $resultadoMatOS = listaMatOS($conn, $id);
             <td>CÓD.:</td>
             <td colspan="5">PEÇAS APLICADAS</td>
             <td>QTD</td>
-            <td>VALOR</td>
+            <td>CUSTO</td>
         </tr>
         <tr>
             <?php
@@ -319,7 +326,7 @@ $resultadoMatOS = listaMatOS($conn, $id);
             <td><?php echo $Mat['id']; ?></td>
             <td colspan="5"><?php echo utf8_encode($Mat['nomeMat']); ?></td>
             <td><?php echo $Mat['quantidade']; ?></td>
-            <td><?php echo $Mat['valorUnitario']; ?></td>
+            <td><?="R$ ".number_format($Mat['valorUnitario'],2,',','.'); ?></td>
         </tr>
             <?php endforeach; ?>
         
@@ -337,7 +344,12 @@ $resultadoMatOS = listaMatOS($conn, $id);
             <td>Horas Técniccas</td>
             <td colspan="7">
                 <p class="text-justify">
-                    <?php echo $horaTecnica =  $os['horasTecnicas']." min"; ?>
+                    <?php 
+                    $horaTecnica =  $os['horasTecnicas'];
+                    if($horaTecnica==null){
+                    	echo '0 min';
+                    } else {
+                    echo $horaTecnica =  $os['horasTecnicas']." min"; } ?>
                 </p>                    
                     <input type="hidden" name="horaTecnica" value="<?=$horaTecnica?>" >
             </td>
@@ -360,10 +372,14 @@ $resultadoMatOS = listaMatOS($conn, $id);
                 Data / Hora:
                 <p class="text-center"><br />
                     <?php $dataHoraFinal = $os['dataHora']; 
-                    echo $dataHoraFinal->format('Y-m-d H:i:s');
+                    echo $dataHoraFinal->format('d-m-Y H:i:s');
                     ?>
                 </p>
-                <input type="hidden" value="<?php echo $dataHoraFinal->format('Y-m-d H:i:s'); ?>"
+                <input type="hidden" value="<?php 
+                    if($dataHoraFinal==NULL){
+                        echo '00/00/00 00:00:00';
+                    } else {
+                    echo $dataHoraFinal->format('d-m-Y H:i:s'); } ?>"
                             
             </td>
         </tr>
@@ -376,13 +392,13 @@ $resultadoMatOS = listaMatOS($conn, $id);
                 <input type="hidden" name="nomeUsuarioAutorizado" value="<?=$nomeUsuarioAutorizado?>">
             </td>
         </tr>
-        <tr>
+        	<tr>
                 <!-- 7 x 1 -->
                 <td colspan="7"><p class="text-center">De acordo com os serviços realizados</p></td>
                 <td>Satisfação</td>
             </tr>
             <tr>
-            <!-- -->
+            <!-- 5-2-1 -->
             <td colspan="5" rowspan="4"><p class="text-left">Responsável:</p>
                     
                     <h4 class="text-center">
@@ -391,20 +407,33 @@ $resultadoMatOS = listaMatOS($conn, $id);
                     <input type="hidden" name="nomeUsuarioResponsavel" value="<?=$nomeUsuarioResponsavel?>">
                     carimbo e assinatura
             </td>
-            <td rowspan="4" colspan="2">Data / Hora<br />
+
+            <td colspan="2" rowspan="4" >Data / Hora<br />
                 <p class="text-center">
                     <?php $dataHoraAssinatura = $os['dataHoraAssinatura']; 
-                    echo $dataHoraAssinatura->format('Y-m-d H:i:s'); ?>
+                    if ($dataHoraAssinatura == null){
+                        echo '00/00/00 00:00:00';
+                    }else{
+                    echo $dataHoraAssinatura->format('d-m-Y H:i:s'); } ?>
                 </p>
                 <input  type="hidden" name="dataHoraAssinatura" 
-                 value="<?php $dataHoraAssinatura->format('Y-m-d H:i:s');
+                 value="<?php  if ($dataHoraAssinatura == null){
+                        echo '00/00/00 00:00:00';
+                    }else{
+                    echo $dataHoraAssinatura->format('d-m-Y H:i:s'); }
                     ?>">   
             </td>
             <td rowspan="4">
-                <input type="radio" name="satisfacao" value="<?=$os['CodSatisfacao']?>" />
+               <input type="radio" name="satisfacao" value="<?=$os['CodSatisfacao']?>" />
                     
                  
-                 <?php echo utf8_encode($os['satisfacao']); ?>  
+                 <?php
+                 if($os['satisfacao']==NULL){
+                     echo "NÃO FOI INFORMADO";
+                 } else {
+                  echo   utf8_encode($os['satisfacao']);
+                 }
+                     ?>  
                     
                 </td>
             </tr>

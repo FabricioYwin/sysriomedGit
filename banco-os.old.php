@@ -1,25 +1,22 @@
 <?php
 
- function listaOS($conn, $DataInicial = NULL, $DataFinal = NULL, $Setor = NULL, $TipoOS = NULL, $status = NULL  ){   
+ function listaOS($conn, $DataInicial = NULL, $DataFinal = NULL, $Setor = NULL, $Status = NULL){   
      $RelacaoOS = array();
     $where = [];
     $where[] = "cliente.id = (select usuario.idCliente from usuario where usuario.login = '".usuarioLogado()."')";
      
     if ($DataInicial) {
         $where[] = "os.dataHora >= '{$DataInicial}'";
-    }
-    if($DataFinal) {
-        $where[] = "os.dataHora <= '{$DataFinal}'";    
-    }
+        }
+    if ($DataFinal) {
+            $where[] = "os.dataHora <= '{$DataFinal}'";    
+    } 
     if ($Setor) {
-        $where[] = "setor.id = '{$Setor}'";    
-    }
-    if ($status) {
-        $where[] = "os.status = '{$status}'"; 
-    }
-    if ($TipoOS) {
-        $where[] = "os.idTipoOs = '{$TipoOS}'";
-    }
+            $where[] = "setor.id = '{$Setor}'";    
+        } 
+    if ($Status) {
+            $where[] = "os.status = '{$Status}'";
+        }
         
         $SQL = "select os.id, os.dataHora, cliente.nomeFantasia, 
         setor.nome as NomeSetor, os.motivoOs, 
@@ -69,40 +66,24 @@ order by dataHora DESC";
  
  function SetorCliente($conn){
      $RelacaoSetor = array();
-     $resultadoSetor = sqlsrv_query($conn, "select setor.id as idSetor, setor.nome as nSetor from os 
+     $resultado = sqlsrv_query($conn, "select setor.id as idSetor, setor.nome as nSetor from os 
          inner join cliente on cliente.id = os.idCliente
-         inner join setor on setor.idCliente = cliente.id
+         inner join setor on setor.id = os.idSetor
 where cliente.id = (select usuario.idCliente from usuario where usuario.login = '". usuarioLogado()."' )
 group by setor.id, setor.nome order by setor.nome");
-     while ($SetorOS = sqlsrv_fetch_array($resultadoSetor, SQLSRV_FETCH_ASSOC)){;
+     while ($SetorOS = sqlsrv_fetch_array($resultado, SQLSRV_FETCH_ASSOC)){;
         array_push($RelacaoSetor, $SetorOS);
      }
      return $RelacaoSetor;
  }
- 
- function TipoOSCliente($conn){
-     $RelTipoOS = array();
-     $resultadoTipoOS = sqlsrv_query($conn, "SELECT distinct idTipoOs, tipoOs.nome as nomeTiposo FROM os
 
-inner join tipoOs on tipoOs.id = os.idTipoOs
-inner join cliente on cliente.id = os.idCliente
-
-where cliente.id = (select usuario.idCliente from usuario where usuario.login = '". usuarioLogado()."' )
-order by tipoOs.nome");
-     while ($TipoOS = sqlsrv_fetch_array($resultadoTipoOS, SQLSRV_FETCH_ASSOC)){;
-        array_push($RelTipoOS, $TipoOS);
+ function statusOS($conn){
+     $statusOS = array();
+     $resultado = sqlsrv_query($conn, "select status from os group by status order by status");
+     while ($RelStatus = sqlsrv_fetch_array($resultado, SQLSRV_FETCH_ASSOC)){;
+        array_push($statusOS, $RelStatus);
      }
-     
-     return $RelTipoOS;
- }
-
- function statusRelOS($conn){
-     $RelStatus = array();
-     $resultadoStatus = sqlsrv_query($conn, "select status from os group by status order by status");
-     while ($statusOS = sqlsrv_fetch_array($resultadoStatus, SQLSRV_FETCH_ASSOC)){;
-        array_push($RelStatus, $statusOS );
-     }     
-     return $RelStatus;
+     return $statusOS;
  }
 
  function listaHistOS($conn, $id){
@@ -158,18 +139,15 @@ order by tipoOs.nome");
     itemMaterial.rm,  modelo.foto, modelo.nome as modelo, itemMaterial.nSerie, itemMaterial.patrimonio, 
  setor.nome as nomeSetor, itemMaterial.localizacao, os.acessoriosRetirados, tipoOs.nome as TipoOS, os.motivoOs, 
  os.observacoes, os.horasTecnicas, os.nomeUsuarioRetirado, usuario.login, os.nomeUsuarioAutorizado, os.dataHoraFinal, 
- os.nomeUsuarioResponsavel, 
-os.dataHoraAssinatura, 
- 
-case satisfacao	
+ os.nomeUsuarioResponsavel, os.dataHoraAssinatura, case satisfacao	
 	when 'Bom' then 1	
 	when 'Ruim' then 2
 	when 'Ótimo' then 3
 	when 'Regular' then 4
-	else 5	
+	else 5 	
 	end as CodSatisfacao, 
         
-os.satisfacao
+os.satisfacao  
 
 from os 
 
@@ -195,7 +173,17 @@ inner join tipoOs on
 tipoOs.id = os.idTipoOs
 
  where  os.id = {$id}";
-
+//     $query = "SELECT TOP 1000 o.id, cli.nomeFantasia, o.dataHora , cli.endereco, cli.enderecoBairro, cli.enderecoCidade, o.idUsuarioSolicitante, us.nome, cli.telefone, cli.ramal, M.nome, IM.rm
+//  FROM  os as o
+//
+//  inner join  cliente as cli on o.idCliente = cli.id
+//  
+//  inner join  usuario as us on o.idUsuarioSolicitante = us.id
+//   
+//  inner join  itemMaterial as IM on o.idItemMaterial = IM.id
+//  
+//  inner join  material as M on M.id = IM.id 
+//  where o.id = {$id}";
   $resultado = sqlsrv_query($conn, $query) or die(print_r(sqlsrv_errors()));
     return sqlsrv_fetch_array($resultado, SQLSRV_FETCH_ASSOC);
  }
