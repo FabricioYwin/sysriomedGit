@@ -1,7 +1,7 @@
 <?php
 
  function listaOS($conn, $DataInicial = NULL, $DataFinal = NULL, $Setor = NULL, $TipoOS = NULL, $status = NULL  ){   
-     $RelacaoOS = array();
+    $RelacaoOS = array();
     $where = [];
     $where[] = "cliente.id = (select usuario.idCliente from usuario where usuario.login = '".usuarioLogado()."')";
      
@@ -152,7 +152,7 @@ order by tipoOs.nome");
 
 
  function buscaOs($conn, $id){
-     $query = "select  os.id,  cliente.razaoSocial, (select left(razaoSocial, CHARINDEX(' ', razaoSocial)-1) from cliente where id = 79 ) as PrimeiroNome, os.dataHora,  cliente.endereco, 
+     $query = "select  os.id,  cliente.razaoSocial, os.dataHora,  cliente.endereco, 
         cliente.enderecoNumero,  cliente.enderecoBairro,  cliente.enderecoCidade, 
         cliente.enderecoUF,  os.nomeUsuarioSolicitante,  cliente.telefone,  cliente.ramal,   material.nome as nomeEquip,  
     itemMaterial.rm,  modelo.foto, modelo.nome as modelo, itemMaterial.nSerie, itemMaterial.patrimonio, 
@@ -198,6 +198,44 @@ tipoOs.id = os.idTipoOs
 
   $resultado = sqlsrv_query($conn, $query) or die(print_r(sqlsrv_errors()));
     return sqlsrv_fetch_array($resultado, SQLSRV_FETCH_ASSOC);
+    echo $query;
+ }
+ 
+ function listaCustoSetor($conn, $DataInicial = NULL, $DataFinal = NULL){
+    $RelacaoCustoSetor = array();
+    $where = [];
+    $where[] = "cliente.id = (select usuario.idCliente from usuario where usuario.login = '".usuarioLogado()."')";
+    
+    if ($DataInicial) {
+        $where[] = "os.dataHora >= '{$DataInicial}'";
+    }
+    if($DataFinal) {
+        $where[] = "os.dataHora <= '{$DataFinal}'";    
+    }
+    
+    $SQL = "SELECT setor.nome as nomeSetor, count(os.id) as QtdOS, sum(itemMaterial.valorUnitario) as CustoTotal
+  FROM os
+
+  inner join setor on
+  setor.id = os.idSetor
+
+  inner join itemMaterial on 
+  ItemMaterial.id = os.idItemMaterial
+
+  inner join cliente on
+  cliente.id = os.idCliente
+
+    where " . implode(' AND ', $where) . "  
+
+  group by setor.nome";
+    
+    $resultado = sqlsrv_query($conn, $SQL);
+    
+    while ($CustoSetor = sqlsrv_fetch_array($resultado, SQLSRV_FETCH_ASSOC)){;
+        array_push($RelacaoCustoSetor, $CustoSetor);
+    }
+    
+    return $RelacaoCustoSetor;
  }
  
 

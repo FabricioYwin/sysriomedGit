@@ -105,12 +105,12 @@
         </td>       
         <td><?=utf8_encode($os['nomeFantasia']); ?></td>
         <td><?=utf8_encode($os['NomeSetor']); ?></td>       
-        <td><?=utf8_encode($os['motivoOs']); ?></td>
-        <td><?="R$ ".number_format($os['TotalMaterial'],2, ',', '.'); ?></td>
+        <td style="width: 440px;"><?=utf8_encode($os['motivoOs']); ?></td>
+        <td style="width: 140px;"><?="R$ ".number_format($os['TotalMaterial'],2, ',', '.'); ?></td>
         <td><?=utf8_encode($os['NomeTipoOS']); ?></td>
         <td><?=utf8_encode($os['status']); ?></td>
         <td >
-            <a href="os-altera-formulario.php?id=<?=$os['id']?>" class="btn btn-warning"><span class="glyphicon glyphicon-copy"></span>&nbsp;OS</a>
+            <a href="os-altera-formulario.php?id=<?=$os['id']?>" target="_blank" class="btn btn-warning"><span class="glyphicon glyphicon-copy"></span>&nbsp;OS</a>
         </td>
     </tr>
  <?php endforeach; ?>

@@ -88,14 +88,12 @@
                         <span class="sr-only">Toggle Dropdown</span>
                         </button>
                         <ul class="dropdown-menu" role="menu">
-                          <li><a href="#">Submenu1</a></li>
-                          <li><a href="#">Submenu2</a></li>
-                          <li><a href="#">Submenu3</a></li>
-                          <li class="divider"></li>
-                          <li><a href="#">Submenu4</a></li>
+                          <li><a href="os-lista.php">Lista de OS</a></li>
+                          <li><a href="custo-setor.php">Custo por Setor</a></li>
+                        
                         </ul>
                         
-                        <a href="os-lista.php" class="btn btn-danger">Lista de OS</a>
+                        
 
                         <a href="logout.php" class="btn btn-danger"><span class="glyphicon glyphicon-share-alt">&nbsp;Sair</span></a>
 

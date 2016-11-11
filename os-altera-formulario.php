@@ -63,7 +63,8 @@ $resultadoMatOS = listaMatOS($conn, $id);
         </td>
         <td colspan="2">ORDEMDE DE SERVIÇO<br /><br />
             
-                           <?php $ID_form = utf8_encode("N. ".$os['id']." - ".$os['PrimeiroNome']);
+                           <?php // $ID_form = utf8_encode("N. ".$os['id']." - ".$os['PrimeiroNome']); ?>
+                           <?php $ID_form = utf8_encode("N. ".$os['id']);
                             echo $ID_form;
                            ?>
             <input  type="hidden" name="id" value="<?=$ID_form?>">
@@ -305,7 +306,7 @@ $resultadoMatOS = listaMatOS($conn, $id);
                     if($data == null){
                         echo '00/00/00 00:00:00';
                     } else {
-                    echo $data->format('d-m-Y H:i:s'); } 
+                    echo $data->format('d/m/Y H:i:s'); } 
                     ?></td>
         </tr>
             <?php endforeach; ?>
@@ -372,14 +373,14 @@ $resultadoMatOS = listaMatOS($conn, $id);
                 Data / Hora:
                 <p class="text-center"><br />
                     <?php $dataHoraFinal = $os['dataHora']; 
-                    echo $dataHoraFinal->format('d-m-Y H:i:s');
+                    echo $dataHoraFinal->format('d/m/Y H:i:s');
                     ?>
                 </p>
                 <input type="hidden" value="<?php 
                     if($dataHoraFinal==NULL){
                         echo '00/00/00 00:00:00';
                     } else {
-                    echo $dataHoraFinal->format('d-m-Y H:i:s'); } ?>"
+                    echo $dataHoraFinal->format('d/m/Y H:i:s'); } ?>"
                             
             </td>
         </tr>
