@@ -86,7 +86,7 @@ $resultadoMatOS = listaMatOS($conn, $id);
                         if($data==NULL){
                             echo '00/00/00 00:00:00';
                         } else {
-                            echo $data->format('d-m-Y'); 
+                            echo $data->format('d/m/Y'); 
                         }
                             ?>
                 </p>
@@ -94,7 +94,7 @@ $resultadoMatOS = listaMatOS($conn, $id);
                     if($data==NULL){
                             echo '00/00/00 00:00:00';
                         } else {
-                            echo $data->format('d-m-Y'); 
+                            echo $data->format('d/m/Y'); 
                         }
                         ?>">
             </td>
@@ -197,7 +197,7 @@ $resultadoMatOS = listaMatOS($conn, $id);
             <td colspan="2" rowspan="4" >
                 <p class="center">
                     <?php $foto = $os['foto']; ?>
-                    <img src="<?="http://riomed.ddns.net:7821/seci/resources/imagens/".$foto; ?>" title="<?=  utf8_encode($equipamento);?>" class="img-responsive" style="width: 100px; height: 80px" />
+                    <img src="<?="http://riomed.ddns.net:7821/seci/resources/imagens/".$foto; ?>" title="<?=utf8_encode($equipamento);?>" class="img-responsive" style="width: 100px; height: 80px" />
                     
                     
                 </p>

@@ -19,7 +19,7 @@
             <th>NOME</th>
             <th>TIPO</th>
             <th>N. SÉRIE</th>
-            <th>VALOR UNITÁRIO</th>
+            <th>CUSTO</th>
             <th>EDITAR</th>
         </tr>
     <?php
@@ -34,7 +34,7 @@
             <td><?php echo utf8_encode($material['nome']); ?></td>
             <td><?php echo utf8_encode($material['tipo']); ?></td>
             <td><?php echo utf8_encode($material['nSerie']); ?></td>
-            <td><?= $material['valorUnitario']; ?></td>
+            <td><?="R$ ".number_format($material['valorUnitario'], 2, ',', '.') ; ?></td>
             <td><a href="material-altera-formulario.php?IdItem=<?=$material['IdItem']; ?>" class="btn btn-warning">Alterar</a></td>
 <!--            <td class="pull-right">
                 <form action="remove-material.php" method="post">

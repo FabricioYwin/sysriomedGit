@@ -80,7 +80,7 @@
         <td><?= $os['id']; ?></td>
         <td>
             <?php $data = $os['dataHora']; 
-                echo $data->format('d-m-Y');
+                echo $data->format('d/m/Y');
             ?>
         </td>       
         <td><?=utf8_encode($os['nomeFantasia']); ?></td>

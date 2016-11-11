@@ -1,4 +1,4 @@
-
+<?php include 'logica-usuario.php'; ?>
 <!DOCTYPE html>
 
 <html lang="pt-br">
@@ -27,11 +27,22 @@
          dateFormat: 'dd/mm/yy',
              dayNames: ['Domingo','Segunda','Terça','Quarta','Quinta','Sexta','Sábado'],
     dayNamesMin: ['Dom','Seg','Ter','Qua','Qui','Sex','Sáb','Dom'],
-    dayNamesShort: ['Dom','Seg','Ter','Qua','Qui','Sex','Sáb','Dom']
+    dayNamesShort: ['Dom','Seg','Ter','Qua','Qui','Sex','Sáb','Dom'],
+    monthNames: ['Janeiro','Fevereiro','Março','Abril','Maio','Junho','Julho','Agosto','Setembro','Outubro','Novembro','Dezembro'],
+    monthNamesShort: ['Jan','Fev','Mar','Abr','Mai','Jun','Jul','Ago','Set','Out','Nov','Dez'],
+    nextText: 'Próximo',
+    prevText: 'Anterior'
          
     });    
   } );
   </script>
+  
+  
+<script>
+  $(function () {
+    $('.dropdown-toggle').dropdown();
+  }); 
+</script>
    
     
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -61,7 +72,6 @@
                     <div class="col-sm-2">
                         <a href="index.php" alt="Sistema de OS - Rio Med" title="Sistema de OS - Rio Med">
                             <img src="imagens/logo-mini.png" class="img-responsive img-rounded">
-<!--                            <img src="imagens/logo-mini.png" class="img-responsive img-rounded">-->
                         </a>
 
                     </div>
@@ -71,6 +81,20 @@
                 <div class="row">
                     <div class="btn btn-group pull-right">
                         <a  href="material-lista.php" class="btn btn-danger">Lista de Materiais</a>
+                        <!-- Inicio Menu DropDown -->
+                        <button type="button" class="btn btn-danger">OS</button>
+                        <button type="button" class="btn btn-danger dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
+                        <span class="caret"></span>
+                        <span class="sr-only">Toggle Dropdown</span>
+                        </button>
+                        <ul class="dropdown-menu" role="menu">
+                          <li><a href="#">Submenu1</a></li>
+                          <li><a href="#">Submenu2</a></li>
+                          <li><a href="#">Submenu3</a></li>
+                          <li class="divider"></li>
+                          <li><a href="#">Submenu4</a></li>
+                        </ul>
+                        
                         <a href="os-lista.php" class="btn btn-danger">Lista de OS</a>
 
                         <a href="logout.php" class="btn btn-danger"><span class="glyphicon glyphicon-share-alt">&nbsp;Sair</span></a>

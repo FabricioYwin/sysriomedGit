@@ -37,9 +37,9 @@
                            value="<?php echo utf8_encode($material['nSerie']); ?>"></td>
             </tr>
             <tr>            
-                <td>VALOR UNITÁRIO:</td>
+                <td>CUSTO</td>
                 <td><input class="form-control" type="number" name="valorUnitario"
-                           value="<?=$material['valorUnitario']?>"></td>
+                           value="<?=number_format($material['valorUnitario'],2);?>" step="0.01"></td>
             
 <!--            <tr>
                 <td>Categoria</td>

@@ -84,9 +84,9 @@ $resultadoMatOS = listaMatOS($conn, $id);
             <td>Data:</td>
             <td><p class='text-justify'>
                     <?php $data = $os[dataHora]; 
-                            echo $data->format('d-m-Y'); ?>
+                            echo $data->format('d/m/Y'); ?>
                 </p>
-                <input type='hidden' name='data' value='<?php echo $data->format('d-m-Y'); ?>'>
+                <input type='hidden' name='data' value='<?php echo $data->format('d/m/Y'); ?>'>
             </td>
         </tr> 
         <tr>

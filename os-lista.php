@@ -73,19 +73,22 @@
     <br>
     
 
-<table class="table table-striped table-bordered">
-    
-    <tr>
-        <th>ID</th>
-        <th>DATA</th>
-        <th>CLIENTE</th>
-        <th>SETOR</th>       
-        <th style="width: 30%">MOTIVOS OS</th>
-        <th>CUSTO</th>
-        <th>TIPO OS</th>
-        <th>STATUS</th>
-        <th class="text-center">AÇÕES</th>
-    </tr>
+<table id="grid-data-api" class="table table-bordered table-condensed table-hover table-striped" data-toggle="bootgrid" data-ajax="true" data-url="/api/data/basic">
+    <thead>
+        <tr>
+            <th data-column-id="id" data-type="numeric" data-identifier="true">ID</th>
+            <th data-column-id="DATA">DATA</th>
+            <th data-column-id="CLIENTE">CLIENTE</th>
+            <th data-column-id="SETOR">SETOR</th>       
+            <th data-column-id="MOTIVOSOS">MOTIVOS OS</th>
+            <!--<th style="width: 30%">MOTIVOS OS</th>-->
+            <th data-column-id="CUSTOTOTAL">CUSTO TOTAL</th>
+            <th data-column-id="TIPOOS">TIPO OS</th>
+            <th data-column-id="STATUS">STATUS</th>
+            <th data-column-id="ACOES">AÇÕES</th>
+<!--            <th class="text-center">AÇÕES</th>-->
+        </tr>
+    </thead>
     <?php
    $RelacaoOS = listaOS($conn, isset($_POST['DataInicial']) ? $_POST['DataInicial'] : null, 
             isset($_POST['DataFinal']) ? $_POST['DataFinal'] : null, 
@@ -97,7 +100,7 @@
         <td><?= $os['id']; ?></td>
         <td>
             <?php $data = $os['dataHora']; 
-                echo $data->format('d-m-Y');
+                echo $data->format('d/m/Y');
             ?>
         </td>       
         <td><?=utf8_encode($os['nomeFantasia']); ?></td>
