@@ -1,5 +1,5 @@
 <?php
-include 'conecta.php';
+include 'conect/conecta.php';
 
  function listaMateriais($conn){
     $materiais = array();

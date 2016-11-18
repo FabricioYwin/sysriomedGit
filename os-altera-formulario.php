@@ -13,7 +13,8 @@
     <title>..:: Rio Med ::..</title>
 
     <!-- Bootstrap -->
-    <link href="css/bootstrap.min.css" rel="stylesheet">
+    
+    <link href="css/bootstrap.min.css" rel="stylesheet" >
     <link href="css/estilo.css" rel="stylesheet" >
 
     <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
@@ -29,11 +30,10 @@
           <div class="principal">
 
 <?php 
-//include "cabecalho.php";
- include "conecta.php";
+
+ include "conect/conecta.php";
  include "banco-os.php";
  include 'logica-usuario.php';
- include 'mpdf/mpdf.php';
  
 
 /* @var $_GET type */
@@ -51,7 +51,7 @@ $resultadoMatOS = listaMatOS($conn, $id);
 <form action="altera-os.php" method="post">
 
 
-<table  class="table table-striped table-responsive table-bordered">
+    <table  class="table table-striped table-responsive table-bordered">
     <tr>
         <td><img src="imagens/logo-mini.png" class="img-responsive img-rounded"></td>
         <td colspan="5">
@@ -72,6 +72,7 @@ $resultadoMatOS = listaMatOS($conn, $id);
     </tr>
         <tr>            
             <td>CLIENTE:</td>
+            
             <td colspan="5">
                 <p class="text-left">
                 <?php $razaoSocial = utf8_encode($os['razaoSocial']);
@@ -198,8 +199,7 @@ $resultadoMatOS = listaMatOS($conn, $id);
             <td colspan="2" rowspan="4" >
                 <p class="center">
                     <?php $foto = $os['foto']; ?>
-                    <img src="<?="http://riomed.ddns.net:7821/seci/resources/imagens/".$foto; ?>" title="<?=utf8_encode($equipamento);?>" class="img-responsive" style="width: 100px; height: 80px" />
-                    
+                    <img src="<?="http://riomed.ddns.net:7821/seci/resources/imagens/".$foto; ?>" title="<?=utf8_encode($equipamento);?>" class="img-responsive"  />                    
                     
                 </p>
                 <input type="hidden" name="foto" 
@@ -326,7 +326,10 @@ $resultadoMatOS = listaMatOS($conn, $id);
         <tr>
             <td><?php echo $Mat['id']; ?></td>
             <td colspan="5"><?php echo utf8_encode($Mat['nomeMat']); ?></td>
-            <td><?php echo $Mat['quantidade']; ?></td>
+            <td><?php 
+            if($Mat['Quant']==null)
+                { echo '0';
+                }else {echo $Mat['Quant']; }  ?></td>
             <td><?="R$ ".number_format($Mat['valorUnitario'],2,',','.'); ?></td>
         </tr>
             <?php endforeach; ?>
@@ -371,16 +374,17 @@ $resultadoMatOS = listaMatOS($conn, $id);
             </td>
             <td rowspan="2" >
                 Data / Hora:
-                <p class="text-center"><br />
-                    <?php $dataHoraFinal = $os['dataHora']; 
-                    echo $dataHoraFinal->format('d/m/Y H:i:s');
-                    ?>
-                </p>
-                <input type="hidden" value="<?php 
+                <?php 
+                    $dataHoraFinal = $os['dataHoraFinal'];
                     if($dataHoraFinal==NULL){
-                        echo '00/00/00 00:00:00';
+                        $dataHoraFinal = '00/00/00 00:00:00';
                     } else {
-                    echo $dataHoraFinal->format('d/m/Y H:i:s'); } ?>"
+                    $dataHoraFinal = $os['dataHoraFinal']->format('d/m/Y H:i:s'); } ?>
+                <p class="text-center"><br />
+                    <?=$dataHoraFinal?>
+                </p>
+                
+                <input type="hidden" value="<?=$dataHoraFinal?>"
                             
             </td>
         </tr>
@@ -393,11 +397,11 @@ $resultadoMatOS = listaMatOS($conn, $id);
                 <input type="hidden" name="nomeUsuarioAutorizado" value="<?=$nomeUsuarioAutorizado?>">
             </td>
         </tr>
-        	<tr>
+       <tr>
                 <!-- 7 x 1 -->
                 <td colspan="7"><p class="text-center">De acordo com os serviços realizados</p></td>
                 <td>Satisfação</td>
-            </tr>
+        </tr>
             <tr>
             <!-- 5-2-1 -->
             <td colspan="5" rowspan="4"><p class="text-left">Responsável:</p>
@@ -442,8 +446,6 @@ $resultadoMatOS = listaMatOS($conn, $id);
     
         
 </form>
-
-
-
-
-
+          </div></div>
+  </body>
+</html>

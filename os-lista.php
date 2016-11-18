@@ -5,6 +5,34 @@
     include 'banco-os.php';
     include 'logica-usuario.php';
  ?>
+<link rel="//cdn.datatables.net/1.10.12/css/jquery.dataTables.min.css">
+    <script src="//cdn.datatables.net/1.10.12/js/jquery.dataTables.min.js">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+    
+    <script>
+        $(document).ready(function(){
+    $('#DT_OS_Lista').DataTable({
+        "language": {
+            "lengthMenu": "Exibindo _MENU_ registros por páginas",
+            "zeroRecords": "Nenhum resultado encontrado",
+            "info": "Página _PAGE_ de _PAGES_",
+            "infoEmpty": "Nenhum resultado disponível",
+            "sSearch": "Pesquisar: ",
+            "infoFiltered": "(Número _MAX_ total registros)",
+            "processing": true,
+        "serverSide": true,
+            "ajax": "../scripts/script_busca.php",
+        
+            "oPaginate": {
+                "sFirst": "Início",
+                "sPrevious": "Anterior",
+                "sNext": "Próximo",
+                "sLast": "Último"
+            }
+        }});
+});
+        
+    </script>
 
 
 <?php if(isset($_SESSION["success"])) { ?>
@@ -12,7 +40,7 @@
 <?php
     unset($_SESSION["success"]);
 } ?>
-    <div class="container-fluid">
+    <div class="container-fluid" >
         <div class="row">
             <form method="post" action="">
                 <div class="col-lg-2"> 
@@ -73,19 +101,20 @@
     <br>
     
 
-<table id="grid-data-api" class="table table-bordered table-condensed table-hover table-striped" data-toggle="bootgrid" data-ajax="true" data-url="/api/data/basic">
+<!--<table id="DT_OS_Lista" class="table table-bordered table-condensed table-hover table-striped" data-toggle="bootgrid" data-ajax="true" data-url="/api/data/basic">-->
+<table id="DT_OS_Lista" class=" display table table-bordered table-condensed table-hover table-striped" >
     <thead>
         <tr>
-            <th data-column-id="id" data-type="numeric" data-identifier="true">ID</th>
-            <th data-column-id="DATA">DATA</th>
-            <th data-column-id="CLIENTE">CLIENTE</th>
-            <th data-column-id="SETOR">SETOR</th>       
-            <th data-column-id="MOTIVOSOS">MOTIVOS OS</th>
-            <!--<th style="width: 30%">MOTIVOS OS</th>-->
-            <th data-column-id="CUSTOTOTAL">CUSTO TOTAL</th>
-            <th data-column-id="TIPOOS">TIPO OS</th>
-            <th data-column-id="STATUS">STATUS</th>
-            <th data-column-id="ACOES">AÇÕES</th>
+            <th>ID</th>
+            <th>DATA</th>
+            <th>CLIENTE</th>
+            <th style="width: 150px;">SETOR</th>       
+            <th style="width: 150px;">MOTIVOS OS</th>
+            <!--<th >MOTIVOS OS</th>-->
+            <th>CUSTO TOTAL</th>
+            <th>TIPO OS</th>
+            <th style="width: 150px;">STATUS</th>
+            <th style="width: 200px;">AÇÕES</th>
 <!--            <th class="text-center">AÇÕES</th>-->
         </tr>
     </thead>
@@ -105,20 +134,17 @@
         </td>       
         <td><?=utf8_encode($os['nomeFantasia']); ?></td>
         <td><?=utf8_encode($os['NomeSetor']); ?></td>       
-        <td style="width: 440px;"><?=utf8_encode($os['motivoOs']); ?></td>
-        <td style="width: 140px;"><?="R$ ".number_format($os['TotalMaterial'],2, ',', '.'); ?></td>
+        <td><?=utf8_encode($os['motivoOs']); ?></td>
+        <td><?="R$ ".number_format($os['TotalMaterial'],2, ',', '.'); ?></td>
         <td><?=utf8_encode($os['NomeTipoOS']); ?></td>
         <td><?=utf8_encode($os['status']); ?></td>
         <td >
             <a href="os-altera-formulario.php?id=<?=$os['id']?>" target="_blank" class="btn btn-warning"><span class="glyphicon glyphicon-copy"></span>&nbsp;OS</a>
+            <a href="os-pdf.php?id=<?=$os['id']?>" target="_blank" class="btn btn-warning"><img src="imagens/pdf.png" style="width: 25px; height: 20px;"> PDF</a>
         </td>
     </tr>
  <?php endforeach; ?>
 </table>
-
+    <br /><br />
 
 <?php include 'rodape.php'; ?>
-
-
-
-

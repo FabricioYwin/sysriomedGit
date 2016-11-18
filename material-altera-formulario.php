@@ -1,5 +1,5 @@
 <?php include 'cabecalho.php'; 
- include 'conecta.php';
+ include 'conect/conecta.php';
  include 'banco-material.php';
  
  $IdItem = $_GET['IdItem'];

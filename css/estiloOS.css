@@ -1,0 +1,27 @@
+html,
+body {
+    width: 100%;
+    height: 100%;
+}
+
+.table {
+    width: 2480px;
+    height: 3508px;
+    font-style: normal;
+    margin-top: 10px;
+    font-family: "Arial";
+    font-size: 8px;
+}
+
+.objLeft {
+    text-align: left;
+}
+.objCenter{
+    text-align: center;
+}
+
+#fotoOS{
+    align-items: center;
+    width: 100px; 
+    height: 80px;
+}

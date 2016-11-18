@@ -1,7 +1,7 @@
 <?php
-$hostname = gethostbyaddr($_SERVER['REMOTE_ADDR']);
 
-$serverName = $hostname."\SQLEXPRESS"; 
+
+$serverName = "DESKTOP-3ITI8SF\SQLEXPRESS"; 
 
 $connectionInfo = array("Database"=>"medx");
 

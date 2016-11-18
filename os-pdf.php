@@ -1,7 +1,9 @@
 <?php 
- include 'conecta.php';
+    include 'MPDF57/mpdf.php';
+ include 'conect/conecta.php';
  include 'banco-os.php';
  include 'logica-usuario.php';
+ 
  
 /* @var $_GET type */
 $id = $_GET['id'];
@@ -10,393 +12,285 @@ $os = buscaOs($conn, $id);
 $resultadoHistOS = listaHistOS($conn, $id);
 $resultadoMatOS = listaMatOS($conn, $id);
 
- /* PDF */
+if($os['dataHora']->format('d/m/Y') == null){
+    $dataHora = '00/00/00';
+} else {
+    $dataHora = $os['dataHora']->format('d/m/Y');
+}
 
-  define('MPDF_PATH', 'mpdf/');
-  include(MPDF_PATH.'mpdf.php');
-  $mpdf=new mPDF();
-  $mpdf->WriteHTML("<!DOCTYPE html>
-<html lang='pt-br'>
-  <head>
-    <meta charset='utf-8'>
-    <meta name='description' content='Free Web tutorials'>
-    <meta name='keywords' content='HTML,CSS,XML,JavaScript'>
-    <meta name='author' content='Hege Refsnes'>
-   
+if($os['horasTecnicas']==null)
+    {
+       $horaTecnica = '0 min';
+    } else {
+    $horaTecnica =  $os['horasTecnicas']." min"; }
     
-    <meta http-equiv='X-UA-Compatible' content='IE=edge'>
-    <meta name='viewport' content='width=device-width, initial-scale=1'>
-    <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
-    <title>..:: Rio Med ::..</title>
+    if($os['dataHoraFinal']==NULL){
+        $dataHoraFinal = '00/00/00 00:00:00';
+    } else {
+    $dataHoraFinal = $os['dataHoraFinal']->format('d/m/Y H:i:s'); }
+    
+    if ($os['dataHoraAssinatura'] == null){
+    $dataHoraAssinatura = '00/00/00 00:00:00';
+    }else{
+    $dataHoraAssinatura = $os['dataHoraAssinatura']->format('d-m-Y H:i:s'); } 
+    
+    if($os['satisfacao']==NULL){
+        $satisfacao =  "NÃO FOI INFORMADO";
+    } else {
+    $satisfacao =  utf8_encode($os['satisfacao']);
+                 }
 
-    <!-- Bootstrap -->
-    <link href='css/bootstrap.min.css' rel='stylesheet'>
-    <link href='css/estilo.css' rel='stylesheet' >
+$html1 = "
+<!DOCTYPE html>
+<html lang='pt-br'>
+<head>
+    <style media='print'>
+        body {
 
-    <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
-    <!-- WARNING: Respond.js doesnt work if you view the page via file:// -->
-    <!--[if lt IE 9]>
-      <script src='https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js'></script>
-      <script src='https://oss.maxcdn.com/respond/1.4.2/respond.min.js'></script>
-    <![endif]-->
-  </head>
-  <body>
+        font-family: sans-serif;
 
-      <div class='container'>
-          <div class='principal'>
+    }
 
+    a {
 
-<!--<h1>OS - Rio Med</h1>-->
-<form action='altera-os.php' method='post'>
+        color: #000066;
 
+        text-decoration: none;
 
-<table  class='table table-striped table-responsive table-bordered'>
-    <tr>
-        <td><img src='imagens/logo-mini.png' class='img-responsive img-rounded'></td>
-        <td colspan='5'>
-            <p class='text-center'>
-                Av. Lobo Júnior, 688 - Penha Circular - Rio de Janeiro - RJ - CEP: 21020-125<br />
-                Telefones: 2156-0500 Assistência Técnica: 2156-0525 E-mail: <a href='mailto:riomed@riomed.com.br'>riomed@riomed.com.br</a><br/>
-                    <a href='www.riomed.com.br'>www.riomed.com.br</a>                
-            </p>
-        </td>
-        <td colspan='2'>ORDEMDE DE SERVIÇO<br /><br />
-            
-                            <?php $ID_form = utf8_encode('N. '".$os[id]."' - '".$os[PrimeiroNome].");
-                           
-                            echo $ID_form;
-                           ?>
-            <input  type='hidden' name='id' 
-                       value='<?=$ID_form?>'>
-        </td>
-    </tr>
-        <tr>            
-            <td>CLIENTE:</td>
-            <td colspan='5'>
-                <p class='text-left'>
-                <?php $razaoSocial = utf8_encode($os[razaoSocial]);
-                    echo $razaoSocial;
-                ?>
-                </p>
-                <input  type='hidden' name='razaoSocial' value='<?=$razaoSocial?>'>
-            </td>
-            
-            <td>Data:</td>
-            <td><p class='text-justify'>
-                    <?php $data = $os[dataHora]; 
-                            echo $data->format('d/m/Y'); ?>
-                </p>
-                <input type='hidden' name='data' value='<?php echo $data->format('d/m/Y'); ?>'>
-            </td>
-        </tr> 
+    }
+
+    table {
+
+        border-collapse: collapse;
+
+    }
+
+    thead {
+
+        vertical-align: bottom;
+
+        text-align: center;
+
+        font-weight: bold;
+
+    }
+
+    tfoot {
+
+        text-align: center;
+
+        font-weight: bold;
+
+    }
+
+    th {
+
+        text-align: left;
+
+        padding-left: 0.35em;
+
+        padding-right: 0.35em;
+
+        padding-top: 0.35em;
+
+        padding-bottom: 0.35em;
+
+        vertical-align: top;
+
+    }
+
+    td {
+
+        padding-left: 0.35em;
+
+        padding-right: 0.35em;
+
+        padding-top: 0.35em;
+
+        padding-bottom: 0.35em;
+
+        vertical-align: top;
+
+    }
+    .textCenter{
+        text-align: center;
+        }
+
+    img {
+
+        margin: 0.2em;
+
+        vertical-align: middle;
+
+    }
+    </style>
+     <link href='css/bootstrap.css' media='print' rel='stylesheet'>
+    <link href='css/estiloOS.css' media='print' rel='stylesheet' >
+</head>   
+<boby>
+    <table border='1' class='table table-striped' cellspacing='10' cellpadding='0' style='font-size: 12px;' >
+   
         <tr>
-            <td>ENDEREÇO:</td>
-            <td><p class='text-justify'>
-                    <?php $endereco = utf8_encode($os[endereco]).', '.$os[enderecoNumero]; 
-                echo $endereco; ?>
+            <td colspan='1'><img src='imagens/logo-mini.png' class='img-responsive img-rounded'></td>
+            <td colspan='8' class='textCenter'>
+                <p class='objCenter'>            
+                    Av. Lobo Júnior, 688 - Penha Circular - Rio de Janeiro - RJ<br>CEP: 21020-125
+                    Telefones: 2156-0500<br > Assistência Técnica: 2156-0525 <br>
+                    E-mail: <a href='mailto:riomed@riomed.com.br'>riomed@riomed.com.br</a> - Site: <a href='www.riomed.com.br'>www.riomed.com.br</a>                
                 </p>
-                <input type='hidden' name='endereco' 
-                       value='<?=$endereco?>' >
             </td>
-            
-            <td>BAIRRO:</td>
-            <td><p class='text-justify'>
-                <?php $bairro = utf8_encode($os[enderecoBairro]);
-                echo $bairro; ?></p>
-                <input type='hidden' name='bairro' 
-                       value='<?=$bairro?>'>
+            <td colspan='3' class='textCenter'>ORDEMDE DE SERVIÇO<br /><br />
+                N. ".$os['id']."
             </td>
-            
-            <td>CIDADE:</td>
-            <td><p class='text-justify'>
-                    <?php $cidade = utf8_encode($os[enderecoCidade]);
-                    echo $cidade; ?>
-                </p>
-                <input type='hidden' name='cidade' 
-                                       value='<?=$cidade;?>'>
-            </td>
-            <td>UF:</td>
-            <td>
-                <p class='text-justify'>
-                <?php $uf = $os[enderecoUF]; echo $uf; ?>
-                </p>
-                <input  type='hidden' name='UF' value='<?=$uf?>'>
-            </td>
-        </tr>    
+        </tr>
         <tr>
-            <td>SOLICITANTE:</td>
-            <td>
-                <p class='text-justify'>
-                <?php $solicitante = utf8_encode($os[nomeUsuarioSolicitante]); echo $solicitante; ?>
+            <td colspan='9'>CLIENTE:&nbsp;".utf8_encode($os['razaoSocial'])."</td>
+            <td colspan='3'>Data:&nbsp;".$dataHora."</td>
+        </tr>
+        <tr>
+            <td colspan='5'>ENDEREÇO:&nbsp;".utf8_encode($os['endereco']).", ".$os['enderecoNumero']."</td>
+            <td colspan='2'>BAIRRO:&nbsp;".utf8_encode($os['enderecoBairro'])."</td>
+            <td colspan='4'>CIDADE:&nbsp;".utf8_encode($os['enderecoCidade'])."</td>
+            <td colspan='1'>UF:&nbsp;".$os['enderecoUF']."</td>
+        </tr>
+        <tr>
+            <td colspan='3'>SOLICITANTE:&nbsp;".utf8_encode($os['nomeUsuarioSolicitante'])."</td>
+            <td colspan='4'>LOCAL:&nbsp;".$local."</td>
+            <td colspan='4'>TELEFONE:".$os['telefone']."</td>
+            <td>RAMAL:&nbsp;".$os['ramal']."</td>
+        </tr>
+        <!-- 8 Colunas -->
+        <tr>
+            <td colspan='7'>EQUIPAMENTO: ".utf8_encode($os['nomeEquip'])."</td>
+            <td colspan='3'>RM:".utf8_encode($os['rm'])."</td>
+            <td colspan='2' rowspan='4' >
+                <p class='center'>
+                    <img src='http://riomed.ddns.net:7821/seci/resources/imagens/".$os['foto']."' title='".utf8_encode($equipamento)."' id='fotoOS' />
                 </p>
-                <input type='hidden' name='solicitante' 
-                       value='<?=$solicitante?>' >
             </td>
-            
-            <td>LOCAL:</td>
-            <td>
-                <!-- Falta identificar o campo no DB -->
-                <?php $local = ''; 
-                echo $local; ?>
-                <input type='hidden' name='local'
-                                       value='<?=$local?>'>
-            </td>
-            <td>TELEFONE:</td>
-            <td>
-                <p class='text-justify'>
-                    <?php $telefone = $os[telefone]; echo $telefone; ?>
-                </p>
-                <input type='hidden' name='telefone' value='<?=$telefone?>'>
-            </td>
-            <td>RAMAL:</td>
-            <td>
-                <p class='text-justify'>
-                    <?php $ramal = $os[ramal];
-                            echo $ramal; ?>
-                </p>
-                <input type='hidden' name='ramal'
-                                       value='<?=$ramal?>'>
-            </td>
+        </tr>
+        <!-- 6 Colunas -->
+        <tr>
+            <!-- Falta Identificar no Banco o campo Marca -->
+            <td colspan='5'>MARCA:".$marca."</td>
+            <td colspan='4'>MODELO: ".utf8_encode($os['modelo'])."</td>
+        </tr>
+        <tr>
+            <td colspan='5'>N. SÉRIE: ".utf8_encode($os['nSerie'])."</td>  
+            <td colspan='4'>PATRIMÔNIO: ".utf8_encode($os['patrimonio'])."</td>
+        </tr>
+        <tr>
+            <td colspan='5'>SETOR: ".utf8_encode($os['nomeSetor'])."</td>
+            <td colspan='4'>LOCALIZAÇÃO: ".utf8_encode($os['localizacao'])."</td>           
         </tr>  
         <tr>
-            <td>EQUIPAMENTO:</td>
-            <td colspan='3'>
-                <p class='text-justify'>
-                    <?php $equipamento = utf8_encode($os[nomeEquip]);
-                     echo $equipamento; ?>
-                </p>
-                <input type='hidden' name='equipamento'
-                       value='<?=$equipamento?>' >
-            </td>
-            
-            <td>RM:</td>
-            <td>
-                <p class='text-justify'>
-                    <?php $rm = utf8_encode($os[rm]);
-                    echo $rm; ?>
-                </p>
-                <input type='hidden' name='rm' 
-                       value='<?=$rm?>' >
-            </td>        
-            <td colspan='2' rowspan='4'>
-                <p class='text-justify'>
-                    <?php $foto = $os[foto]; ?>
-                    <img src='<?php echo $foto; ?>' title='<?=$equipamento;?>' />
-                    <?=$foto?>
-                    
-                </p>
-                <input type='hidden' name='foto' 
-                       value='<?=$foto?>' >
-            </td>
-        </tr>    
-        <tr>
-            
-            <td>MARCA:</td>
-            <!-- Falta Identificar no Banco o campo Marca -->
-            <td colspan='3'>
-                <p class='text-justify'>
-                    <?php $marca; ?>
-                </p>
-                <input  type='hidden' name='marca' 
-                       value='<?=$marca?>' >
-            </td>
-            <td>MODELO</td>
-            <td>
-                <p class='text-justify'>
-                    <?php $modelo = utf8_encode($os[modelo]);
-                    echo $modelo ?>
-                </p>
-                <input type='hidden' name='modelo' 
-                       value='<?=$modelo?>' >
-            </td>
-            
-        </tr>    
-        <tr>
-            <td>N. SÉRIE</td>
-            <td colspan='3'>
-                <p class='text-justify'>
-                    <?php $nSerie = utf8_encode($os[nSerie]);
-                    echo $nSerie; ?>
-                </p>
-                <input type='hidden' name='nserie' 
-                       value='<?=$nSerie?>' >
-            </td>
-            <td>PATRIMÔNIO:</td>
-            <td>
-                <p class='text-justify'>
-                    <?php $patrimonio = utf8_encode($os[patrimonio]);
-                        echo $patrimonio; ?>
-                </p>
-                <input type='hidden' name='patrimonio'
-                       value='<?=$patrimonio?>' >
-            </td>
-            
-        </tr>    
-        <tr>
-            <td>SETOR</td>
-            <td colspan='3'>
-                <p class='text-justify'>
-                    <?php $nomeSetor = utf8_encode($os[nomeSetor]);
-                    echo $nomeSetor; ?>
-                </p>
-                <input type='hidden' name='nomeSetor'
-                       value='<?=$nomeSetor?>' >
-            </td>
-            <td>LOCALIZAÇÃO</td>
-            <td>
-                <p class='text-justify'>
-                    <?php $localizacao = utf8_encode($os[localizacao]);
-                    echo $localizacao; ?>
-                </p>
-                <input type='hidden' name='localizacao' 
-                       value='<?=$localizacao?>' >
-            </td>           
-        </tr>         
-        <tr>
             <td>ACESSÓRIOS RETIRADOS</td>
-            <td colspan='7'>
-                <p class='text-justify'>
-                    <?php echo $acessoriosRetirados = utf8_encode($os[acessoriosRetirados]); ?>
-                </p>
-                <input type='hidden' name='acessoriosRetirados' 
-                       value='<?=$acessoriosRetirados?>'></td>
-        </tr>    
+            <td colspan='11'>
+                <p class='text-justify'>".utf8_encode($os['acessoriosRetirados'])."</p>
+            </td>
+        </tr>
         <tr>
             <td>MOTIVO</td>
-            <td colspan='7'>
-                <p class='text-justify'>
-                  <?php echo $motivo = utf8_encode($os[TipoOS]); ?>                    
-                </p>
-                <input type='hidden' name='motivo' 
-                       value='<?=$motivo?>'></td>
-        </tr>        
+            <td colspan='11'>".utf8_encode($os['TipoOS'])."</td>
+        </tr>
         <tr>
-            <td>ETAPA</td>
-            <td colspan='4'>APONTAMENTO</td>
+            <td colspan='1'>ETAPA</td>
+            <td colspan='7'>APONTAMENTO</td>
             <td colspan='2'>TÉCNICO</td>
-            <td>DATA / HORA</td>
-        </tr>
-        <?php
-                $HistOS = listaHistOS($conn, $id);
-                    foreach ($HistOS as $Hist) :
-                       
-                ?>
-        <tr>
-            <td><?php echo $Hist[etapa]; ?></td>
-            <td colspan='4'><?php echo utf8_encode($Hist[descricao]); ?></td>
-            <td colspan='2'><?php echo $Hist[login]; ?></td>
-            <td><?php $data = $Hist[dataHora]; echo $data->format('Y-m-d H:i:s'); ?></td>
-        </tr>
-            <?php endforeach; ?>
+            <td COLSPAN='2'>DATA / HORA</td>
+        </tr>";
+    
+$HistOS = listaHistOS($conn, $id);
+    foreach ($HistOS as $Hist)
+    :
+        if($Hist['dataHora']->format('d/m/Y') == null){
+            $HistData = '00/00/00 00:00:00';
+        } else {
+            $HistData = $Hist['dataHora']->format('d/m/Y H:m');        
+        }
         
+    $html2 = "  <tr>
+                    <td colspan='1'>".$Hist['etapa']."</td>
+                    <td colspan='7'>".utf8_encode($Hist['descricao'])."</td>
+                    <td colspan='2'>".$Hist['login']."</td>
+                    <td COLSPAN='2'>".$HistData."</td>";
+    endforeach;
+    $html3 = "</tr>
         <tr>
-            <td>CÓD.:</td>
-            <td colspan='5'>PEÇAS APLICADAS</td>
-            <td>QTD</td>
-            <td>VALOR</td>
+            <td colspan='1'>CÓD.:</td>
+            <td colspan='9'>PEÇAS APLICADAS</td>
+            <td colspan='1'>QTD</td>
+            <td colspan='1'>CUSTO</td>
         </tr>
-        <tr>
-            <?php
-            $MatOS = listaMatOS($conn, $id);
+        <tr>";
+        $MatOS = listaMatOS($conn, $id);
                     foreach ($MatOS as $Mat) :
-                       
-                ?>
+    $html4 = "
         <tr>
-            <td><?php echo $Mat[id]; ?></td>
-            <td colspan='5'><?php echo utf8_encode($Mat[nomeMat]); ?></td>
-            <td><?php echo $Mat[quantidade]; ?></td>
-            <td><?php echo $Mat[valorUnitario]; ?></td>
-        </tr>
-            <?php endforeach; ?>
+            <td colspan='1'>".$Mat['id']."</td>
+            <td colspan='9'>".utf8_encode($Mat['nomeMat'])."</td>
+            <td colspan='1'>"; 
+            if($Mat['Quant']==null)
+                { $QuantMat =  '0';
+                }else { $QuantMat =  $Mat['Quant']; }
+           $html5 = "</td>
+            <td colspan='1'>R$ ".number_format($Mat['valorUnitario'],2,',','.')."</td>
+        </tr>";
+           endforeach;
+          $html6 = "
         
         <tr>
-            <td>Observações:</td>
-            <td colspan='7'>
-                <p class='text-justify'>
-                    <?php echo $observacoes = utf8_encode($os[observacoes]); ?>
-                </p>
-                <input type='hidden' name='observacoes' 
-                       value='<?=$observacoes?>'>
-            </td>
-        </tr>        
-        <tr>
-            <td>Horas Técniccas</td>
-            <td colspan='7'>
-                <p class='text-justify'>
-                    <?php echo $horaTecnica =  $os[horasTecnicas].' min'; ?>
-                </p>                    
-                    <input type='hidden' name='horaTecnica' value='<?=$horaTecnica?>' >
-            </td>
+            <td colspan='1'>Observações:</td>
+            <td colspan='11'>".utf8_encode($os['observacoes'])."</td>
         </tr>
         <tr>
-            <td>Retirado do setor por:</td>
-            <td colspan='3'>
-                <p class='text-justify'>
-                    <?php echo $nomeUsuarioRetirado = utf8_encode($os[nomeUsuarioRetirado]); ?>
-                </p>
-                <input type='hidden' name='nomeUsuarioRetirado' value='<?=$nomeUsuarioRetirado?>'>
+            <td colspan='1'>Horas Técniccas</td>
+            <td colspan='11'>".$horaTecnica."</td>
+        </tr>
+        <tr>
+            <td colspan='8'>Retirado do setor por: ".utf8_encode($os['nomeUsuarioRetirado'])."</p>
             </td>
             <td rowspan='2' colspan='3'>Autorizado por:
-                <h4 class='text-center'>
-                    <?php echo $login = utf8_encode($os[login]); ?>
-                </h4>
-                <input type='hidden' name='login' value='<?=$login?>'>
+                <h4 class='text-center'>".utf8_encode($os['login'])."</h4>               
             </td>
-            <td rowspan='2' >
+            <td rowspan='2'>
                 Data / Hora:
-                <p class='text-center'><br />
-                    <?php $dataHoraFinal = $os[dataHora]; 
-                    echo $dataHoraFinal->format('Y-m-d H:i:s');
-                    ?>
-                </p>
-                <input type='hidden' value='<?php echo $dataHoraFinal->format('Y-m-d H:i:s'); ?>' >
-                            
+                <p class='text-center'><br />".$dataHoraFinal."</p>
             </td>
         </tr>
         <tr>
-            <td>Concluído por:</td>
-            <td colspan='3'>
-                <p class='text-justify'>
-                    <?php echo $nomeUsuarioAutorizado = utf8_encode($os[nomeUsuarioAutorizado]); ?>
-                </p>
-                <input type='hidden' name='nomeUsuarioAutorizado' value='<?=$nomeUsuarioAutorizado?>' >
-            </td>
+            <td colspan='8'>Concluído por:".utf8_encode($os['nomeUsuarioAutorizado'])."</td>
         </tr>
         <tr>
-                <!-- 7 x 1 -->
-                <td colspan='7'><p class='text-center'>De acordo com os serviços realizados</p></td>
-                <td>Satisfação</td>
-            </tr>
-            <tr>
-            <!-- -->
-            <td colspan='5' rowspan='4'><p class='text-left'>Responsável:</p>
-                    
-                    <h4 class='text-center'>
-                        <?php echo $nomeUsuarioResponsavel = utf8_encode($os[nomeUsuarioResponsavel]);  ?>
-                    </h4>
-                    <input type='hidden' name='nomeUsuarioResponsavel' value='<?=$nomeUsuarioResponsavel?>' >
-                    carimbo e assinatura
+            <!-- 7 x 1 -->
+            <td colspan='11'><p class='text-center'>De acordo com os serviços realizados</p></td>
+            <td>Satisfação</td>
+        </tr>
+        <tr>
+            <!-- 5-2-1 -->
+            <td colspan='7' rowspan='4'><p class='text-left'>Responsável:</p>
+            <h4 class='text-center'>".utf8_encode($os['nomeUsuarioResponsavel'])."</h4>
+                Carimbo e Assinatura
             </td>
-            <td rowspan='4' colspan='2'>Data / Hora<br />
-                <p class='text-center'>
-                    <?php $dataHoraAssinatura = $os[dataHoraAssinatura]; 
-                    echo $dataHoraAssinatura->format('Y-m-d H:i:s'); ?>
-                </p>
-                <input  type='hidden' name='dataHoraAssinatura' 
-                 value='<?php $dataHoraAssinatura->format('Y-m-d H:i:s');
-                    ?>' >   
+            <td colspan='4' rowspan='4' >Data / Hora<br />
+                <p class='text-center'>".$dataHoraAssinatura."</p>
             </td>
             <td rowspan='4'>
-                <input type='radio' name='satisfacao' value='<?=$os[CodSatisfacao]?>' />
-                    
-                 
-                 <?php echo utf8_encode($os[satisfacao]); ?>  
-                    
-                </td>
-            </tr>
-        </table>
-    
-        
-</form>" );
-  $mpdf->Output();
-  exit();
+                ".$satisfacao."
+            </td>
+        </tr>
+    </table>
+</body>
+</html>";
+          
+    date_default_timezone_set('America/Sao_Paulo');
+    $date = date('d/m/Y H:i');
+
+    $arquivo = $date." - OS-PDF.pdf";
+
+    $mpdf = new mPDF();
+    $mpdf->SetDisplayMode('fullpage');
+  
+    $mpdf->writeHTML($html1."".$html2."".$html3."".$html4."".$html5."".$html6);
+
+    $mpdf->Output($arquivo, 'I');

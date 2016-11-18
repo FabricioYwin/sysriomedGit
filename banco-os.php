@@ -1,5 +1,12 @@
 <?php
 
+
+//$itens_por_pagina = 25;
+//
+////Pega a página atual 
+//$pagina = intval($_GET['pagina']);
+
+
  function listaOS($conn, $DataInicial = NULL, $DataFinal = NULL, $Setor = NULL, $TipoOS = NULL, $status = NULL  ){   
     $RelacaoOS = array();
     $where = [];
@@ -21,7 +28,7 @@
         $where[] = "os.idTipoOs = '{$TipoOS}'";
     }
         
-        $SQL = "select os.id, os.dataHora, cliente.nomeFantasia, 
+        $SQL = "select top 1000 os.id, os.dataHora, cliente.nomeFantasia, 
         setor.nome as NomeSetor, os.motivoOs, 
         (select sum(itemMaterial.valorUnitario) from os as OS1
 
@@ -48,12 +55,14 @@ inner join setor on
 setor.id = os.idSetor
 
 inner join usuario on
-usuario.id = os.idUsuarioFinal
+usuario.id = os.idUsuarioSolicitante
 
 inner join tipoOs on
 tipoOs.id = os.idTipoOs
 
 where " . implode(' AND ', $where) . "
+
+
 
 order by dataHora DESC";
         
@@ -62,7 +71,14 @@ order by dataHora DESC";
     while ($os = sqlsrv_fetch_array($resultado, SQLSRV_FETCH_ASSOC)){;
         array_push($RelacaoOS, $os);
     }
-    
+//    $num = sqlsrv_num_rows($resultado);
+//    
+//    if($num === false){
+//        echo 'Erro na contagem ';
+//    } else {
+//        echo $num;
+//    }
+//    echo $SQL;
     return $RelacaoOS;
     
  }
@@ -71,7 +87,7 @@ order by dataHora DESC";
      $RelacaoSetor = array();
      $resultadoSetor = sqlsrv_query($conn, "select setor.id as idSetor, setor.nome as nSetor from os 
          inner join cliente on cliente.id = os.idCliente
-         inner join setor on setor.idCliente = cliente.id
+         inner join setor on setor.id = os.idSetor
 where cliente.id = (select usuario.idCliente from usuario where usuario.login = '". usuarioLogado()."' )
 group by setor.id, setor.nome order by setor.nome");
      while ($SetorOS = sqlsrv_fetch_array($resultadoSetor, SQLSRV_FETCH_ASSOC)){;
@@ -98,7 +114,11 @@ order by tipoOs.nome");
 
  function statusRelOS($conn){
      $RelStatus = array();
-     $resultadoStatus = sqlsrv_query($conn, "select status from os group by status order by status");
+     $resultadoStatus = sqlsrv_query($conn, "SELECT distinct os.status FROM os
+  inner join cliente on cliente.id = os.idCliente
+  where os.idCliente = (select usuario.idCliente from usuario 
+  where usuario.login = '". usuarioLogado()."') order by status");     
+     
      while ($statusOS = sqlsrv_fetch_array($resultadoStatus, SQLSRV_FETCH_ASSOC)){;
         array_push($RelStatus, $statusOS );
      }     
@@ -108,16 +128,16 @@ order by tipoOs.nome");
  function listaHistOS($conn, $id){
     $HistOS = array();
     
-    $resultadoHistOS = sqlsrv_query($conn, "select os.id as IdOs, historicoOS.etapa, historicoOS.descricao, 
-        usuario.login, historicoOS.dataHora  from os 
+    $resultadoHistOS = sqlsrv_query($conn, "select os.id, historicoOS.etapa, historicoOS.descricao, usuario.login, historicoOS.dataHora
+from os 
 
-            inner join historicoOS on
-            os.id = historicoOS.idOs
+inner join historicoOS on
+os.id = historicoOS.idOs
 
-            inner join usuario on
-            usuario.id = historicoOS.idUsuario
+inner join usuario on
+usuario.id = historicoOS.idUsuario
 
-            where os.id = {$id}");
+ where  os.id = {$id}");
     
     while ($Hist = sqlsrv_fetch_array($resultadoHistOS, SQLSRV_FETCH_ASSOC)){
         array_push($HistOS, $Hist);
@@ -189,7 +209,7 @@ inner join setor on
 setor.id = os.idSetor
 
 inner join usuario on
-usuario.id = os.idUsuarioFinal
+usuario.id = os.idUsuarioSolicitante
 
 inner join tipoOs on
 tipoOs.id = os.idTipoOs
@@ -237,5 +257,3 @@ tipoOs.id = os.idTipoOs
     
     return $RelacaoCustoSetor;
  }
- 
-

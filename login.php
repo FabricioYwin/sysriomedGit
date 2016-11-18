@@ -1,4 +1,4 @@
-<?php include 'conecta.php';
+<?php include 'conect/conecta.php';
  include 'banco-usuario.php';
  include 'logica-usuario.php';
 

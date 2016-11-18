@@ -20,11 +20,14 @@ body {
 #loginbox .control-group{ padding:8px 0; margin-bottom:0px;}
 }
 
-
+#fotoOS{
+    max-width: 100px; 
+    max-height: 80px;
+}
 
 
 .RodapeOS{
-    
+    margin-top: 10px;
     color: #d9534f;
     
 }
